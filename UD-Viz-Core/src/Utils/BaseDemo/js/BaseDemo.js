@@ -503,6 +503,99 @@ export class BaseDemo {
     }
 
     /**
+     * 
+     * Billboard Test
+     */
+    setUpBillboardDocuments(view){
+
+
+        var pictureInfos;
+        var coord;
+        var rotationMatrix;
+        // eslint-disable-next-line no-unused-vars
+        var plane;
+        var camera;
+
+        pictureInfos = {
+            panoramic: {
+                latitude: 45.9228208442959,
+                height: 4680.55588294683,
+                longitude: 6.83256920100156,
+                azimuth: 526.3900321920207,
+                roll: 2.1876227239518276,
+                tilt: -11.668910605126001,
+                image: 'http://www.itowns-project.org/itowns-sample-data/images/MontBlanc/MontBlanc.jpg',
+            },
+            camera: {
+                // size of the picture in pixel
+                size: [6490, 4408],
+                // focal length in pixel
+                focal: 8270,
+                // Starting with ENH orientation,
+                // we will change to go to aircraft orientation,
+                // and then, to go to camera orientation.
+                //
+                // Starting from from ENH orientation ( X to east, Y to the north, Z is the vertical)
+                // We now defines the rotations referential space: Aircarft orientation
+                // We are creating the classic aircraft axis, using lookAt and Up :
+                // First we look at the north, (north is on the Y axis in ENH orientation),
+                // so Z axis will point to the north
+                enhToOrientationLookAt: new itowns.THREE.Vector3(0, 1, 0),
+                // then set the up vector to look to the ground,
+                // wich is the opposition of Z in ENH orientation, so Y axis will point to the ground.
+                enhToOrientationUp: new itowns.THREE.Vector3(0, 0, -1),
+                // after that, X axis will naturally point the east.
+                //
+                // From the previous space (X to East, Y to the ground, Z to the north),
+                // let's define the camera orientation (X to East, Y to the sky, Z to the south).
+                orientationToCameraUp: new itowns.THREE.Vector3(0, -1, 0),
+                orientationToCameraLookAt: new itowns.THREE.Vector3(0, 0, 1),
+            },
+            distance: 4000,
+            opacity: 1,
+        };
+
+        function parseAircraftConventionOrientationToMatrix(panoramic) {
+            var euler = new itowns.THREE.Euler(
+                itowns.THREE.MathUtils.degToRad(panoramic.tilt),
+                itowns.THREE.MathUtils.degToRad(panoramic.azimuth),
+                itowns.THREE.MathUtils.degToRad(panoramic.roll),
+                'ZYX');
+
+            return new itowns.THREE.Matrix4().makeRotationFromEuler(euler);
+        }
+
+        coord = new itowns.Coordinates('EPSG:4326', pictureInfos.panoramic.longitude, pictureInfos.panoramic.latitude, pictureInfos.panoramic.height);
+        rotationMatrix = parseAircraftConventionOrientationToMatrix(pictureInfos.panoramic);
+
+        // eslint-disable-next-line no-unused-vars
+        /*camera = initCamera(view, pictureInfos.panoramic.image, coord,
+            pictureInfos.camera.enhToOrientationUp, pictureInfos.camera.enhToOrientationLookAt,
+            rotationMatrix,
+            pictureInfos.camera.orientationToCameraUp, pictureInfos.camera.orientationToCameraLookAt,
+            pictureInfos.distance,
+            pictureInfos.camera.size, pictureInfos.camera.focal);
+
+
+        plane = setupPictureFromCamera(camera, pictureInfos.panoramic.image, pictureInfos.opacity,
+            pictureInfos.distance);
+
+        setupViewCameraDecomposing(view, camera);
+
+        // open view camera FOV of 10° to see landscape around the picture.
+        view.camera.camera3D.fov += 10;
+        view.camera.camera3D.updateProjectionMatrix();
+
+        // uncomment to debug camera
+        // addCameraHelper(view, camera);*/
+
+        // eslint-disable-next-line no-new
+        new itowns.FirstPersonControls(view);
+
+        //setupPictureUI(menuGlobe, pictureInfos, plane, updatePlaneDistance, view, 3000, 15000);
+    }
+
+    /**
      * Initializes the iTowns 3D view.
      * @param {string} area The name of the area to view. Used to adjust the extent, this name should be
      * one of the properties of the extents object (in UD-Viz/UD-Viz-Core/examples/data/config/generalDemoConfig.json file).
@@ -574,6 +667,8 @@ export class BaseDemo {
 
         // Set sky color to blue
         this.view.mainLoop.gfxEngine.renderer.setClearColor(0x6699cc, 1);
+
+        this.setUpBillboardDocuments(this.view);
     }
     /*
     * Updates the 3D view by notifying iTowns that it changed (e.g. because a layer has been added).

@@ -15,6 +15,7 @@ baseDemo.loadConfigFile('../data/config/generalDemoConfig.json').then(() => {
     baseDemo.addBaseMapLayer();
     baseDemo.addElevationLayer();
     baseDemo.setupAndAdd3DTilesLayer('building');
+    //baseDemo.setUpBillboardDocuments();
 
     baseDemo.update3DView();
 
