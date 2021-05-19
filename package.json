@@ -1,0 +1,45 @@
+{
+  "name": "ud-viz",
+  "version": "2.31.6",
+  "description": "A collection of itowns plugins",
+  "main": "src",
+  "scripts": {
+    "test": "npm run build",
+    "build": "cross-env NODE_ENV=production webpack",
+    "build-debug": "cross-env NODE_ENV=development webpack",
+    "debug": "nodemon --verbose --watch src --delay 2500ms ./bin/debug.js -e js,css,html"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VCityTeam/UD-Viz.git"
+  },
+  "license": "(LGPL-2.1)",
+  "bugs": {
+    "url": "https://github.com/VCityTeam/UD-Viz/issues"
+  },
+  "homepage": "https://github.com/VCityTeam/UD-Viz/",
+  "peerDependencies": {},
+  "dependencies": {
+    "proj4": "^2.7.0",
+    "three": "0.126.1",
+    "detect-collisions": "^2.5.2",
+    "itowns": "^2.31.0",
+    "jquery": "^3.6.0",
+    "socket.io-client": "^4.0.0",
+    "vis-data": "^7.1.2",
+    "vis-network": "^9.0.3"
+  },
+  "devDependencies": {
+    "child-process-promise": "^2.2.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^0.28.10",
+    "nodemon": "^2.0.7",
+    "style-loader": "^0.20.3",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.5.0"
+  }
+}

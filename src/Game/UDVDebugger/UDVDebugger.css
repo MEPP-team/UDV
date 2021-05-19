@@ -1,0 +1,14 @@
+/** @format */
+
+#udv_debugger {
+  position: absolute;
+  background-color: aqua;
+  top: 0px;
+  max-width: 500px;
+  max-height: 500px;
+}
+
+canvas {
+  height: 100%;
+  width: 100%;
+}

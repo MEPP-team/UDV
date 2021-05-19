@@ -1,9 +1,0 @@
-node_modules
-package-lock.json
-dist
-lib
-.vs
-.vscode
-
-TileSet_LyonFull_Villeurbanne_Bron_2015/
-.idea/

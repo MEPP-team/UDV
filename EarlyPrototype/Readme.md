@@ -1,3 +1,0 @@
-UD-Viz : Urban Data Vizualisation
-
-Note: references to VCC in the code stand for Virtual City Viewer...
