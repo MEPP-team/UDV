@@ -49,10 +49,12 @@ export class Debug3DTilesWindow extends Window {
       viewerDiv.removeEventListener('mousemove', moveListener);
 
       if (this.selectedCityObject !== undefined) {
+        this.selectedTilesManager.setStyle(this.selectedCityObject.cityObjectId, this.selectedStyle);
+        this.selectedTilesManager.applyStyles();
         this.selectedCityObject = undefined;
+        this.selectedTilesManager = undefined;
+        this.selectedStyle = undefined;
       }
-      this.layerManager.removeAll3DTilesStyles();
-      this.layerManager.applyAll3DTilesStyles();
     });
   }
 
@@ -127,7 +129,7 @@ export class Debug3DTilesWindow extends Window {
    * Logs the TBI in the console.
    */
   logTilesManager() {
-    console.log(this.layerManager.tilesManagers);
+    console.log(this.layerManager);
   }
 
   /**
@@ -151,38 +153,36 @@ export class Debug3DTilesWindow extends Window {
    */
   onMouseClick(event) {
     let cityObject = this.layerManager.pickCityObject(event);
+
     if (cityObject !== undefined) {
-      for (let [key, value] of Object.entries(cityObject.props)) {
-        this.clickDivElement.innerHTML += `<br>${key} : ${value}`;
-      }
+      if(cityObject != this.selectedCityObject){
+        for (let [key, value] of Object.entries(cityObject.props)) {
+          this.clickDivElement.innerHTML += `<br>${key} : ${value}`;
+        }
 
-      if (this.selectedCityObject) {
-        this.selectedTilesManager.removeStyle(
-          this.selectedCityObject.cityObjectId
-        );
-        this.selectedTilesManager.applyStyles();
-      }
+        if (this.selectedCityObject) {
+          this.selectedTilesManager.setStyle(this.selectedCityObject.cityObjectId, this.selectedStyle);
+          this.selectedTilesManager.applyStyles();
+        }
 
-      this.selectedCityObject = cityObject;
-      this.selectedTilesManager = this.layerManager.getTilesManagerByLayerID(
-        this.selectedCityObject.tile.layer.id
-      );
-      this.selectedTilesManager.setStyle(
-        this.selectedCityObject.cityObjectId,
-        'selected'
-      );
-      this.selectedTilesManager.applyStyles({
-        updateFunction: this.selectedTilesManager.view.notifyChange.bind(
-          this.selectedTilesManager.view
-        ),
-      });
-      this.clickDivElement.innerHTML = /*html*/ `
+        this.selectedCityObject = cityObject;
+        this.selectedTilesManager = this.layerManager.getTilesManagerByLayerID(this.selectedCityObject.tile.layer.id);
+        this.selectedStyle = this.selectedTilesManager.styleManager.getStyleIdentifierAppliedTo(this.selectedCityObject.cityObjectId);
+        this.selectedTilesManager.setStyle(this.selectedCityObject.cityObjectId, 'selected');
+        this.selectedTilesManager.applyStyles({
+          updateFunction: this.selectedTilesManager.view.notifyChange.bind(
+            this.selectedTilesManager.view
+          ),
+        });
+
+        this.clickDivElement.innerHTML = /*html*/`
            3D Tiles : ${this.selectedTilesManager.layer.name}<br>
            Vertex indexes : ${cityObject.indexStart} to ${cityObject.indexEnd}
             (${cityObject.indexCount})<br>
            Batch ID : ${cityObject.batchId}<br>
            Tile ID : ${cityObject.tile.tileId}
          `;
+      }
     }
   }
 

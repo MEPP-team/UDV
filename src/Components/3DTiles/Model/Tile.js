@@ -89,6 +89,14 @@ export class Tile {
   }
 
   /**
+   * Checks whether the batch table have a specifc attribute
+   * @param {String} attributeName 
+   * @returns {boolean}
+   */
+  asAttributeInBatchTable(attributeName) {
+    return attributeName in this.batchTable.content;
+  }
+  /**
    * If visible, parse the Object3D and the Mesh of the tile to create the
    * city objects.
    */

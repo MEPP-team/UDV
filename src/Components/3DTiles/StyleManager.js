@@ -381,6 +381,27 @@ export class StyleManager {
       this.styleTable[cityObjectId.tileId][cityObjectId.batchId]);
   }
 
+    /**
+   * Gets the style identifier applied to a given object ID.
+   * 
+   * @param {CityObjectID} cityObjectId The city object ID.
+   * 
+   * @returns {CityObjectStyle} The style for the specified city object. If
+   * the city object identifier refers to an array of city objects, the style
+   * for the first one is returned.
+   */
+  getStyleIdentifierAppliedTo(cityObjectId) {
+    if (this.styleTable[cityObjectId.tileId] === undefined) {
+      return undefined;
+    }
+
+    if (this.styleTable[cityObjectId.tileId][cityObjectId.batchId]
+      === undefined) {
+      return undefined;
+    }
+
+    return this.styleTable[cityObjectId.tileId][cityObjectId.batchId];
+  }
   /**
    * Keeps track of the style usage.
    * 
